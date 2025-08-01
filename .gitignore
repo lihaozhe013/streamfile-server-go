@@ -1,0 +1,12 @@
+node.js/
+simple-server
+simple-server.exe
+files/
+.DS_Store
+config.yaml
+logs/
+react/node_modules/
+react/dist/
+public/markdown-viewer/
+dist/
+files

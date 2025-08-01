@@ -1,0 +1,47 @@
+server:
+  host: "0.0.0.0"
+  port: 8000
+  readTimeout: 30s
+  writeTimeout: 30s
+
+storage:
+  uploadDir: "./files"
+  incomingDir: "./files/incoming"
+  privateDir: "./files/private-files"
+  maxUploadSize: 10737418240  # 10GB
+
+security:
+  allowedExtensions:
+    - ".jpg"
+    - ".jpeg"
+    - ".png"
+    - ".gif"
+    - ".pdf"
+    - ".md"
+    - ".txt"
+    - ".html"
+    - ".css"
+    - ".js"
+    - ".zip"
+    - ".tar"
+    - ".gz"
+    - ".7z"
+    - ".svg"
+    - ".mp4"
+    - ".mov"
+    - ".mp3"
+    - ".docx"
+    - ".xlsx"
+    - ".pptx"
+    - ".rtf"
+    - ".db"
+  blockedPaths:
+    - "incoming"
+    - "private-files"
+
+logging:
+  enabled: true        # 日志开关，设置为false则完全禁用日志
+  level: "info"        # 日志级别: debug, info, warn, error
+  format: "json"       # 日志格式: json, text
+  toFile: false        # 是否输出到文件而不是console
+  logDir: "./logs"     # 日志文件目录（当toFile为true时生效）

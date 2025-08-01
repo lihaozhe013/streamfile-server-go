@@ -1,0 +1,40 @@
+{
+  "name": "markdown-viewer-react",
+  "version": "1.0.0",
+  "description": "React-based Markdown Viewer for Simple Server Go",
+  "license": "MIT",
+  "author": "Simple Server Go",
+  "type": "commonjs",
+  "main": "src/MarkdownViewer.tsx",
+  "scripts": {
+    "build": "npm run clean && npm run compile && npm run copy",
+    "build:dev": "npm run clean && npm run compile:dev && npm run copy",
+    "compile": "webpack --mode=production",
+    "compile:dev": "webpack --mode=development",
+    "copy": "mkdir -p ../go/public/markdown-viewer && cp -r dist/* ../go/public/markdown-viewer/",
+    "watch": "npm run clean && webpack --mode=development --watch",
+    "dev": "npm run build:dev && npm run watch",
+    "clean": "rm -rf dist && rm -rf ../go/public/markdown-viewer",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "katex": "^0.16.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-markdown": "^8.0.7",
+    "rehype-katex": "^6.0.3",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^3.0.1",
+    "remark-math": "^5.1.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "typescript": "^5.3.3",
+    "ts-loader": "^9.5.1",
+    "css-loader": "^6.10.0",
+    "style-loader": "^3.3.4",
+    "webpack": "^5.90.1",
+    "webpack-cli": "^5.1.4"
+  }
+}
