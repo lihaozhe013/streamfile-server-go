@@ -11,10 +11,10 @@
     "build:dev": "npm run clean && npm run compile:dev && npm run copy",
     "compile": "webpack --mode=production",
     "compile:dev": "webpack --mode=development",
-    "copy": "mkdir -p ../go/public/markdown-viewer && cp -r dist/* ../go/public/markdown-viewer/",
+    "copy": "mkdir -p ../public/markdown-viewer && cp -r dist/* ../public/markdown-viewer/",
     "watch": "npm run clean && webpack --mode=development --watch",
     "dev": "npm run build:dev && npm run watch",
-    "clean": "rm -rf dist && rm -rf ../go/public/markdown-viewer",
+    "clean": "rm -rf dist && rm -rf ../public/markdown-viewer",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
