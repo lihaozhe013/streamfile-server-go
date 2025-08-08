@@ -12,6 +12,7 @@
 - **文件上传**: 多文件上传到指定目录
 - **Markdown 预览**: 自动渲染 .md 文件
 - **文件搜索**: 基于文件名的搜索功能（当前使用 Rust 原生模块）
+- **媒体文件播放**: 自动识别常见视频/音频扩展名并使用内置 Video.js 播放器渲染（支持快捷键与断点续传）
 
 ### 2. 安全访问控制
 - **公共文件** (`files/`): 完全公开访问
@@ -26,6 +27,14 @@
 - `GET /api/markdown-content` - Markdown内容API
 - `GET /api/search_feat/file_name=:fileName/current_dir=*` - 文件搜索API
 - `POST /upload` - 文件上传API
+
+#### /files/* 行为补充
+同一路径下根据资源类型或参数返回：
+* 目录：若包含 index.html 则返回该文件，否则返回目录浏览页面
+* Markdown (`.md`)：返回内置 Markdown Viewer HTML（前端再通过 API 获取内容）
+* 媒体文件（视频/音频扩展名，见下）：返回内置 Video.js 播放器页面
+* 其它：直接回源文件内容
+* 强制原始文件：任意文件后添加 `?raw=1` 跳过渲染层（播放器/Markdown）直接下载或浏览器默认处理
 
 ## Go 重构项目结构
 
@@ -135,6 +144,32 @@ Response: {
   "filename": "上传的文件名"
 }
 ```
+
+### 5. 媒体播放器（行为说明）
+（不新增额外后台 API，基于 `/files/*` 的内容协商式行为切换）
+
+支持的扩展名：
+
+视频：`mp4, webm, ogv, mov, m4v, mkv, avi`
+
+音频：`mp3, wav, ogg, m4a, flac, aac`
+
+访问示例：
+```
+/files/video/demo.mp4           # 返回播放器 HTML (内部再以 ?raw=1 加载媒体流)
+/files/video/demo.mp4?raw=1     # 直接获取文件流
+```
+
+快捷键（桌面端）：
+* ← / → : 后退 / 前进 5 秒
+* Space : 播放 / 暂停
+* F : 全屏切换
+
+实现要点：
+* Go 端根据扩展名判断并返回 `video-player.html`
+* 前端脚本重建真实媒体 URL（追加 `?raw=1` 保持 Range 请求）
+* 使用 CDN 引入 Video.js（减少部署体积）
+* 音频模式使用精简布局 & 纵向音量控制避免挤压进度条
 
 ## 配置管理
 
