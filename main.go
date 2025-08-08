@@ -154,7 +154,6 @@ func copyFile(src, dst string, logger *logrus.Logger) {
 
 // setupStaticRoutes sets static file routes
 func setupStaticRoutes(router *gin.Engine, cfg *config.Config) {
-	// 静态文件服务 (public目录)
 	// Static file service (public directory)
 	router.Static("/public", "./public")
 	router.StaticFile("/", "./public/index.html")
@@ -178,7 +177,6 @@ func setupAPIRoutes(router *gin.Engine, fileHandler *handlers.FileHandler, uploa
 
 // setupFileRoutes sets file access routes
 func setupFileRoutes(router *gin.Engine, cfg *config.Config) {
-	// 文件浏览和下载
 	// File browsing and download
 	router.GET("/files/*filepath", func(c *gin.Context) {
 		filePath := c.Param("filepath")
@@ -332,5 +330,5 @@ func setupLogFile(cfg *config.Config, logger *logrus.Logger) {
 	logger.SetOutput(logFile)
 
 	// Print one-time info to console
-	logrus.Printf("日志输出已切换到文件: %s", logFileName)
+	logrus.Printf("Log output switched to file: %s", logFileName)
 }
