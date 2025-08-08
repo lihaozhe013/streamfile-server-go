@@ -7,7 +7,7 @@
   "type": "commonjs",
   "main": "src/MarkdownViewer.tsx",
   "scripts": {
-    "build": "npm run clean && npm run compile && npm run copy",
+    "build": "npm run clean && npm run compile",
     "build:dev": "npm run clean && npm run compile:dev && npm run copy",
     "compile": "webpack --mode=production",
     "compile:dev": "webpack --mode=development",
