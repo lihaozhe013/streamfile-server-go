@@ -232,13 +232,27 @@ func setupFileRoutes(router *gin.Engine, cfg *config.Config) {
 			return
 		}
 
-		// Check if it is a Markdown file
-		if filepath.Ext(fullPath) == ".md" {
+		ext := strings.ToLower(filepath.Ext(fullPath))
+
+		// Raw param forces direct file serving (used by media player)
+		if c.Query("raw") == "1" {
+			c.File(fullPath)
+			return
+		}
+
+		// Markdown viewer
+		if ext == ".md" {
 			c.File("./public/markdown-viewer.html")
 			return
 		}
 
-		// Directly serve file
+		// Media player (video / audio)
+		if isMediaExtension(ext) {
+			c.File("./public/video-player.html")
+			return
+		}
+
+		// Directly serve other files
 		c.File(fullPath)
 	})
 
@@ -246,6 +260,20 @@ func setupFileRoutes(router *gin.Engine, cfg *config.Config) {
 	router.GET("/files", func(c *gin.Context) {
 		c.File("./public/file-browser.html")
 	})
+}
+
+// isMediaExtension checks if the extension is a supported audio/video type
+func isMediaExtension(ext string) bool {
+	switch ext {
+	// Video
+	case ".mp4", ".webm", ".ogv", ".mov", ".m4v", ".mkv", ".avi":
+		return true
+	// Audio
+	case ".mp3", ".wav", ".ogg", ".m4a", ".flac", ".aac":
+		return true
+	default:
+		return false
+	}
 }
 
 // printStartupInfo prints startup information
