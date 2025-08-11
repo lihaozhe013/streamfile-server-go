@@ -40,8 +40,8 @@ security:
     - "private-files"
 
 logging:
-  enabled: true        # 日志开关，设置为false则完全禁用日志
-  level: "info"        # 日志级别: debug, info, warn, error
-  format: "json"       # 日志格式: json, text
-  toFile: false        # 是否输出到文件而不是console
-  logDir: "./logs"     # 日志文件目录（当toFile为true时生效）
+  enabled: true        # Log switch. If set to false, logging is completely disabled.
+  level: "info"        # Log level: debug, info, warn, error
+  format: "json"       # Log format: json, text
+  toFile: false        # Whether output to a file instead of the console
+  logDir: "./logs"     # Log file directory (effective when `toFile` is true)
