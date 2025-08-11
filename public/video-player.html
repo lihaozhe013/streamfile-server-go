@@ -8,12 +8,23 @@
     <!-- <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" /> -->
     <link href="/public/libs/video-js.css" rel="stylesheet" />
   </head>
-  <body class="m-0 font-sans bg-neutral-900 text-neutral-200 flex flex-col min-h-screen">
-    <header class="py-[10px] px-4 bg-neutral-800 flex items-center gap-3 shadow">
-      <h1 id="fileTitle" class="text-base font-medium truncate m-0">Loading...</h1>
-      <div class="text-xs opacity-60 ml-auto">← / → Skip 5s • Space Pause/Play • F Fullscreen</div>
+  <body
+    class="m-0 font-sans bg-neutral-900 text-neutral-200 flex flex-col min-h-screen"
+  >
+    <header
+      class="py-[10px] px-4 bg-neutral-800 flex items-center gap-3 shadow"
+    >
+      <h1 id="fileTitle" class="text-base font-medium truncate m-0">
+        Loading...
+      </h1>
+      <div class="text-xs opacity-60 ml-auto">
+        ← / → Skip 5s • Space Pause/Play • F Fullscreen
+      </div>
     </header>
-    <div id="player-container" class="flex-1 flex items-center justify-center p-3">
+    <div
+      id="player-container"
+      class="flex-1 flex items-center w-[80vw] mx-auto justify-center p-3"
+    >
       <video
         id="videoPlayer"
         class="video-js vjs-theme-ss vjs-big-play-centered text-sm w-full max-w-5xl"
@@ -21,7 +32,9 @@
         preload="auto"
       ></video>
     </div>
-    <footer class="text-center py-2 text-[11px] opacity-50">Simple Server Media Player (video.js)</footer>
+    <footer class="text-center py-2 text-[11px] opacity-50">
+      Simple Server Media Player (video.js)
+    </footer>
     <!-- <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script> -->
     <script src="/public/libs/video.min.js"></script>
     <script src="/public/libs/tailwind.js"></script>
