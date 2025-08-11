@@ -17,6 +17,8 @@
   const relPath = extractMediaPath();
   const fileTitleEl = document.getElementById("fileTitle");
   fileTitleEl.textContent = relPath || "Media";
+  // Keep document title in sync with displayed filename
+  document.title = relPath || "Media";
 
   const mediaUrl =
     "/files/" + relPath + (relPath.includes("?") ? "&" : "?") + "raw=1";

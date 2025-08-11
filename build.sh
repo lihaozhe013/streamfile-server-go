@@ -10,6 +10,5 @@ go build
 mkdir -p dist
 [ -f simple-server ] && cp simple-server dist/
 [ -f simple-server.exe ] && cp simple-server.exe dist/
-[ -f config.yaml ] && cp config.yaml dist/
 [ -f config.yaml.example ] && cp config.yaml.example dist/
 cp -r public dist/
