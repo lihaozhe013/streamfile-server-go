@@ -1,4 +1,4 @@
-node.js/
+node_modules/
 simple-server
 simple-server.exe
 files/
@@ -10,3 +10,4 @@ react/dist/
 public/markdown-viewer/
 dist/
 files
+public/output.css

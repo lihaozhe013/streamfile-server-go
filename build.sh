@@ -6,6 +6,8 @@ mkdir -p ../public/markdown-viewer
 cp -r dist/* ../public/markdown-viewer/
 
 cd ..
+npm run build-css-prod
+
 go build
 mkdir -p dist
 [ -f simple-server ] && cp simple-server dist/
