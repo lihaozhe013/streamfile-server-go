@@ -30,9 +30,22 @@
   const videoEl = document.getElementById("videoPlayer");
   if (isAudio) {
     videoEl.classList.add("vjs-audio");
-    videoEl.setAttribute("style", "max-width:720px; width:100%;");
+    videoEl.style.position = "relative";
+    videoEl.style.width = "720px";
+    videoEl.style.maxWidth = "100%";
+    videoEl.style.height = "auto";
+    videoEl.style.left = "50%";
+    videoEl.style.top = "50%";
+    videoEl.style.transform = "translate(-50%, -50%)";
   } else {
     videoEl.setAttribute("playsinline", "");
+  // For video, fill the entire container
+  videoEl.style.width = "100%";
+  videoEl.style.height = "100%";
+  videoEl.style.objectFit = "contain";
+  videoEl.style.position = "absolute";
+  videoEl.style.top = "0";
+  videoEl.style.left = "0";
   }
 
   // Provide source – rely on server Content-Type
@@ -45,7 +58,8 @@
     controls: true,
     preload: "auto",
     playbackRates: [0.5, 0.75, 1, 1.25, 1.5, 2],
-    fluid: !isAudio,
+    fluid: false,
+    fill: true,
     userActions: { hotkeys: false },
     controlBar: {
       volumePanel: { inline: false, vertical: true },
@@ -137,4 +151,17 @@
     if (p.endsWith(".aac")) return "audio/aac";
     return "";
   }
+
+  // Dynamic resize handling
+  function handleResize() {
+    // With fill mode, let CSS drive size; just nudge video.js
+    if (player) player.trigger('resize');
+  }
+
+  // Listen for window resize events
+  window.addEventListener('resize', handleResize);
+  window.addEventListener('orientationchange', handleResize);
+  
+  // Initial resize
+  handleResize();
 })();

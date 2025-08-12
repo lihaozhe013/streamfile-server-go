@@ -4,6 +4,7 @@
   "description": "A lightweight file server written in Go",
   "main": "index.js",
   "scripts": {
+    "build": "npm run build-css-prod",
     "build-css": "tailwindcss -i ./src/input.css -o ./public/output.css --watch",
     "build-css-prod": "tailwindcss -i ./src/input.css -o ./public/output.css --minify"
   },
