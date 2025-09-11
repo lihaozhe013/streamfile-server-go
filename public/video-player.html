@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <title>Media Player</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ef4444'><path d='M8 5v14l11-7z'/></svg>" />
     <!-- <link href="https://vjs.zencdn.net/8.10.0/video-js.css" rel="stylesheet" /> -->
     <link href="/public/libs/video-js.css" rel="stylesheet" />
   </head>
@@ -17,7 +18,20 @@
         <h1 id="fileTitle" class="text-base font-medium truncate m-0">
           Loading...
         </h1>
-        <div class="text-xs opacity-60 ml-auto">
+        <button 
+          id="openNativeBtn" 
+          class="px-4 py-2 text-sm bg-neutral-700 hover:bg-neutral-600 text-neutral-200 hover:text-white rounded-lg border border-neutral-600 hover:border-neutral-500 transition-all duration-200 flex-shrink-0 shadow-sm hover:shadow-md"
+          title="Open in browser's native player"
+          style="min-width: 140px;"
+        >
+          <span class="flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-1M14 7h6m0 0v6m0-6l-8 8"/>
+            </svg>
+            Native Player
+          </span>
+        </button>
+        <div class="text-xs opacity-60 ml-auto hidden sm:block">
           ← / → Skip 5s • Space Pause/Play • F Fullscreen
         </div>
       </header>

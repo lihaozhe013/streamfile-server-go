@@ -152,6 +152,27 @@
     return "";
   }
 
+  // Open in Native Player button handler
+  window.addEventListener('load', function() {
+    const openNativeBtn = document.getElementById("openNativeBtn");
+    
+    if (openNativeBtn) {
+      openNativeBtn.addEventListener("click", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        // Show a quick visual feedback
+        const originalText = openNativeBtn.innerHTML;
+        openNativeBtn.innerHTML = '<span class="flex items-center gap-2">Opening...</span>';
+        
+        setTimeout(function() {
+          // Navigate to the raw media file URL, letting the browser handle it natively
+          window.location.href = mediaUrl;
+        }, 200);
+      });
+    }
+  });
+
   // Dynamic resize handling
   function handleResize() {
     // With fill mode, let CSS drive size; just nudge video.js
