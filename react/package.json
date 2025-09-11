@@ -7,15 +7,8 @@
   "type": "commonjs",
   "main": "src/MarkdownViewer.tsx",
   "scripts": {
-    "build": "npm run clean && npm run compile",
-    "build:dev": "npm run clean && npm run compile:dev && npm run copy",
-    "compile": "webpack --mode=production",
-    "compile:dev": "webpack --mode=development",
-    "copy": "mkdir -p ../public/markdown-viewer && cp -r dist/* ../public/markdown-viewer/",
-    "watch": "npm run clean && webpack --mode=development --watch",
-    "dev": "npm run build:dev && npm run watch",
-    "clean": "rm -rf dist && rm -rf ../public/markdown-viewer",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run compile",
+    "compile": "webpack --mode=production"
   },
   "dependencies": {
     "katex": "^0.16.8",
