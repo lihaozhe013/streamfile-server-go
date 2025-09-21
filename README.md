@@ -1,6 +1,6 @@
-### Simple Server Go
+### StreamFile Server Go
 
-A lightweight file server written in Go that provides file upload, download, browse, Markdown preview, and an enhanced media (video/audio) player.
+A lightweight streamfile server written in Go that provides file upload, download, browse, Markdown preview, and an enhanced media (video/audio) player.
 
 -----
 
