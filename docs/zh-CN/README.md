@@ -1,4 +1,4 @@
-# Simple Server Go
+# StreamFile Server Go
 
 Go版本的轻量级文件服务器，提供文件上传、下载、浏览、Markdown预览，以及增强的视频/音频播放器功能。
 
