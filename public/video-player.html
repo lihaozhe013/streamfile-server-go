@@ -11,7 +11,6 @@
       #app-container {
         position: relative;
       }
-
       .player-chrome {
         position: absolute;
         left: 0;
@@ -24,8 +23,8 @@
           rgba(17, 17, 17, 0) 100%
         );
         box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(18px);
-        -webkit-backdrop-filter: blur(18px);
+        /* backdrop-filter: blur(18px); */
+        /* -webkit-backdrop-filter: blur(18px); */
         transition: opacity 0.25s ease, transform 0.25s ease;
         z-index: 30;
       }
@@ -113,9 +112,6 @@
           preload="auto"
         ></video>
       </div>
-      <footer class="text-center py-2 text-[11px] opacity-50 flex-shrink-0">
-        StreamFile Server Player (video.js)
-      </footer>
     </div>
     <!-- <script src="https://vjs.zencdn.net/8.10.0/video.min.js"></script> -->
     <script src="/public/libs/video.min.js"></script>
