@@ -34,6 +34,22 @@
         filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
       }
 
+      .vjs-control-bar {
+        transition: opacity 0.25s ease, transform 0.25s ease;
+      }
+
+      #app-container[data-chrome="hidden"] .vjs-control-bar {
+        opacity: 0;
+        transform: translateY(100%);
+        pointer-events: none;
+      }
+
+      #app-container[data-chrome="visible"] .vjs-control-bar {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
       @media (hover: hover) {
         #app-container[data-chrome="hidden"] .player-chrome {
           opacity: 0;
