@@ -3,7 +3,11 @@ const path = require("path");
 const root = path.resolve(__dirname, "..");
 const r = (...p) => path.resolve(root, ...p);
 
-fs.rmSync(r("dist"), { recursive: true });
+try {
+    fs.rmSync(r("dist"), { recursive: true });
+}
+catch {}
+
 fs.ensureDirSync(r("dist"));
 fs.copySync(r("public"), r("dist/public"))
 fs.copySync(r("config.yaml.example"), r("dist/config.yaml.example"))
