@@ -62,12 +62,15 @@ async function fetchFiles(path = '') {
       const imageExts = [
         'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg', 'ico', 'tiff', 'tif', 'apng', 'avif', 'jfif', 'pjpeg', 'pjp', 'raw', 'heic', 'heif'
       ];
+      const externalLinkExts = ['html'];
       const ext = displayName.split('.').pop()?.toLowerCase() || '';
       let icon = '/public/icons/document.svg';
       if (videoAudioExts.includes(ext)) {
         icon = '/public/icons/play-circle.svg';
       } else if (imageExts.includes(ext)) {
         icon = '/public/icons/photo.svg';
+      } else if (externalLinkExts.includes(ext)) {
+        icon = 'public/icons/external-link.svg';
       }
       const filePath = `/files/${encodedPath}`;
       list.innerHTML += `
