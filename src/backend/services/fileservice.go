@@ -3,8 +3,8 @@ package services
 import (
 	"os"
 	"path/filepath"
-	"simple-server/internal/config"
-	"simple-server/internal/utils"
+	"simple-server/src/backend/config"
+	"simple-server/src/backend/utils"
 	"strings"
 )
 

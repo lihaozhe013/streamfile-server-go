@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"simple-server/internal/config"
-	"simple-server/internal/utils"
+	"simple-server/src/backend/config"
+	"simple-server/src/backend/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"

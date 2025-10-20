@@ -19,7 +19,7 @@ try {
 catch {}
 
 try {
-    fs.rmSync(r("public/output.css"));
+    fs.rmSync(r("public/styles.css"));
 }
 catch {}
 

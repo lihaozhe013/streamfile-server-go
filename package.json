@@ -6,11 +6,11 @@
   "scripts": {
     "install:all": "npm i && cd react && npm i",
     "build": "npm run clean && npm run build-css-prod && npm run build:markdown-viewer && go build && node scripts/post-build.js",
-    "build:markdown-viewer": "cd react && npm run build",
+    "build:markdown-viewer": "cd src/frontend/markdown-viewer && npm run build",
     "build:prod": "npm run build && node scripts/post-build-prod.js",
     "clean": "node scripts/clean.js",
-    "build-css": "tailwindcss -i ./src/input.css -o ./public/output.css --watch",
-    "build-css-prod": "tailwindcss -i ./src/input.css -o ./public/output.css --minify"
+    "build-css": "tailwindcss -i ./src/frontend/input.css -o ./public/styles.css --watch",
+    "build-css-prod": "tailwindcss -i ./src/frontend/input.css -o ./public/styles.css --minify"
   },
   "keywords": [
     "go",

@@ -10,4 +10,5 @@ react/dist/
 public/markdown-viewer/
 dist/
 files
+public/styles.css
 public/output.css

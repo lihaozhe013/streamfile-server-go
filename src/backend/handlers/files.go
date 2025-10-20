@@ -3,8 +3,8 @@ package handlers
 import (
 	"net/http"
 	"path/filepath"
-	"simple-server/internal/services"
-	"simple-server/internal/utils"
+	"simple-server/src/backend/services"
+	"simple-server/src/backend/utils"
 
 	"github.com/gin-gonic/gin"
 )
