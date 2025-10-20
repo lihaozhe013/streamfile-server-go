@@ -5,113 +5,19 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import "katex/dist/katex.min.css";
-import "./markdown-styles.css";
 
-// Extend the Window interface to include our custom property
-declare global {
-  interface Window {
-    markdownContent?: string;
-    ReactDOM?: any;
-  }
-}
-
-interface MarkdownViewerProps {}
-
-interface Heading {
-  id: string;
-  text: string;
-  level: number;
-}
-
-// Utility function to clean markdown formatting from text
-const cleanMarkdownText = (text: string): string => {
-  if (!text || typeof text !== 'string') {
-    return '';
-  }
-  
-  return text
-    // Remove HTML <br> tags and replace with spaces
-    .replace(/<br\s*\/?>/gi, ' ')
-    // Remove bold formatting: **text** or __text__
-    .replace(/\*\*(.*?)\*\*/g, '$1')
-    .replace(/__(.*?)__/g, '$1')
-    // Remove italic formatting: *text* or _text_
-    .replace(/\*(.*?)\*/g, '$1')
-    .replace(/_(.*?)_/g, '$1')
-    // Remove strikethrough: ~~text~~
-    .replace(/~~(.*?)~~/g, '$1')
-    // Remove inline code: `text`
-    .replace(/`([^`]+)`/g, '$1')
-    // Remove links: [text](url) -> text
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    // Remove images: ![alt](url) -> alt
-    .replace(/!\[([^\]]*)\]\([^)]+\)/g, '$1')
-    // Clean up any remaining markdown characters
-    .replace(/[*_~`[\]()]/g, '')
-    .trim();
-};
-
-// Utility function to generate consistent heading IDs
-const generateHeadingId = (text: string, existingIds: Set<string> = new Set()): string => {
-  if (!text || typeof text !== 'string') {
-    return `heading-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
-  
-  // Clean markdown formatting first
-  const cleanText = cleanMarkdownText(text);
-  
-  let baseId = cleanText
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '') // Remove special characters except hyphens
-    .replace(/\s+/g, '-') // Replace spaces with hyphens
-    .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
-    .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
-  
-  // If baseId is empty after cleaning, generate a fallback
-  if (!baseId) {
-    baseId = `heading-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-  }
-  
-  // Ensure uniqueness by adding a suffix if needed
-  let finalId = baseId;
-  let counter = 1;
-  while (existingIds.has(finalId)) {
-    finalId = `${baseId}-${counter}`;
-    counter++;
-  }
-  
-  existingIds.add(finalId);
-  return finalId;
-};
-
-// Utility function to extract text content consistently
-const extractTextContent = (node: any): string => {
-  if (typeof node === 'string') return node;
-  if (typeof node === 'number') return node.toString();
-  if (!node) return '';
-  
-  if (Array.isArray(node)) {
-    return node.map(extractTextContent).join('');
-  }
-  
-  if (typeof node === 'object') {
-    if (node.props && node.props.children) {
-      return extractTextContent(node.props.children);
-    }
-    if (node.children) {
-      return extractTextContent(node.children);
-    }
-  }
-  
-  return '';
-};
+import type { MarkdownViewerProps, Heading } from "@/types";
+import {
+  cleanMarkdownText,
+  generateHeadingId,
+  extractTextContent,
+  processRelativePaths,
+  extractHeadings,
+} from "@/utils/markdown";
 
 const MarkdownViewer: React.FC<MarkdownViewerProps> = () => {
   // Get markdown content from window object (passed from server)
-  const [markdownText, setMarkdownText] = useState<string>(
-    window.markdownContent || ""
-  );
+  const [markdownText, setMarkdownText] = useState<string>(window.markdownContent || "");
   const [headings, setHeadings] = useState<Heading[]>([]);
   const [activeHeading, setActiveHeading] = useState<string>("");
   const [isTocOpen, setIsTocOpen] = useState<boolean>(false);
@@ -121,23 +27,9 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = () => {
   // Extract headings from markdown content
   useEffect(() => {
     if (markdownText) {
-      const headingRegex = /^(#{1,6})\s+(.+)$/gm;
-      const extractedHeadings: Heading[] = [];
-      const newUsedIds = new Set<string>();
-      let match;
-
-      while ((match = headingRegex.exec(markdownText)) !== null) {
-        const level = match[1].length;
-        const rawText = match[2].trim();
-        const cleanText = cleanMarkdownText(rawText); // Clean text for display
-        const id = generateHeadingId(rawText, newUsedIds); // Use raw text for ID generation (it will be cleaned inside)
-        extractedHeadings.push({ id, text: cleanText, level });
-      }
-
+      const { headings: extractedHeadings, usedIds: newUsedIds } = extractHeadings(markdownText);
       usedIds.current = newUsedIds;
       setHeadings(extractedHeadings);
-      
-      // Reset active heading when headings change
       setActiveHeading("");
     }
   }, [markdownText]);
@@ -175,8 +67,7 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = () => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    // Initial check
-    handleScroll();
+    handleScroll(); // Initial check
     
     return () => window.removeEventListener('scroll', handleScroll);
   }, [headings, activeHeading]);
@@ -184,85 +75,40 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = () => {
   // Handle relative paths in markdown content
   useEffect(() => {
     if (window.markdownContent) {
-      // Get the current file path from the URL
-      const currentPath = window.location.pathname;
-      const pathSegments = currentPath.split('/');
-      
-      // Remove '/files/' prefix and get the directory path
-      if (pathSegments[1] === 'files') {
-        const filePath = pathSegments.slice(2).join('/');
-        const dirPath = filePath.substring(0, filePath.lastIndexOf('/'));
-        
-        // Process markdown content to handle relative paths
-        let processedContent = window.markdownContent;
-        
-        // Handle relative image paths
-        processedContent = processedContent.replace(
-          /!\[([^\]]*)\]\((?!https?:\/\/)([^)]+)\)/g,
-          (match, alt, src) => {
-            // Skip if it's already an absolute path or starts with /
-            if (src.startsWith('/') || src.startsWith('http')) {
-              return match;
-            }
-            // Convert relative path to absolute path
-            const absolutePath = dirPath ? `/files/${dirPath}/${src}` : `/files/${src}`;
-            return `![${alt}](${absolutePath})`;
-          }
-        );
-        
-        // Handle relative link paths
-        processedContent = processedContent.replace(
-          /\[([^\]]*)\]\((?!https?:\/\/)([^)]+)\)/g,
-          (match, text, href) => {
-            // Skip if it's already an absolute path or starts with /
-            if (href.startsWith('/') || href.startsWith('http') || href.startsWith('#')) {
-              return match;
-            }
-            // Convert relative path to absolute path
-            const absolutePath = dirPath ? `/files/${dirPath}/${href}` : `/files/${href}`;
-            return `[${text}](${absolutePath})`;
-          }
-        );
-        
-        setMarkdownText(processedContent);
-      }
+      const processedContent = processRelativePaths(window.markdownContent, window.location.pathname);
+      setMarkdownText(processedContent);
     }
   }, []);
 
   // Handle back button click
   const handleBackClick = () => {
     const currentPath = window.location.pathname;
-    // Remove the filename by finding the last '/' and removing everything after it
     const lastSlashIndex = currentPath.lastIndexOf('/');
     if (lastSlashIndex > 0) {
       const parentPath = currentPath.substring(0, lastSlashIndex);
       window.location.href = parentPath;
     } else {
-      // If no parent directory, go to root
       window.location.href = '/';
     }
   };
 
-  // Handle TOC item click - improved version with error handling
+  // Handle TOC item click
   const handleTocClick = (headingId: string) => {
     const element = document.getElementById(headingId);
     
     if (element) {
-      // Calculate the offset to account for the sticky header
       const headerOffset = 80;
       const elementPosition = element.offsetTop - headerOffset;
       
-      // Smooth scroll to the element
       window.scrollTo({
         top: elementPosition,
         behavior: 'smooth'
       });
       
-      // Update active heading immediately for better UX
       setActiveHeading(headingId);
     } else {
       console.warn('Heading element not found for ID:', headingId);
-      // Try to find the heading by text content as fallback
+      // Fallback: try to find by text content
       const allHeadings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
       const targetHeading = headings.find(h => h.id === headingId);
       
@@ -289,16 +135,12 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = () => {
     }
   };
 
-  // Custom heading renderer to add IDs - improved version with consistent ID generation
+  // Custom heading renderer to add IDs
   const createHeadingRenderer = (level: number) => {
     return ({ children, ...props }: any) => {
       const renderedText = extractTextContent(children);
       
-      // Find the matching heading from our extracted headings list
-      // The rendered text should match the cleaned text we stored
       const matchingHeading = headings.find(h => h.text === renderedText && h.level === level);
-      
-      // If no match found, try to find by cleaning the rendered text and comparing
       const fallbackHeading = !matchingHeading ? 
         headings.find(h => cleanMarkdownText(h.text) === renderedText && h.level === level) : 
         null;
@@ -308,22 +150,7 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = () => {
       
       const headingProps = { id, ...props };
       
-      switch (level) {
-        case 1:
-          return <h1 {...headingProps}>{children}</h1>;
-        case 2:
-          return <h2 {...headingProps}>{children}</h2>;
-        case 3:
-          return <h3 {...headingProps}>{children}</h3>;
-        case 4:
-          return <h4 {...headingProps}>{children}</h4>;
-        case 5:
-          return <h5 {...headingProps}>{children}</h5>;
-        case 6:
-          return <h6 {...headingProps}>{children}</h6>;
-        default:
-          return <h1 {...headingProps}>{children}</h1>;
-      }
+      return React.createElement(`h${level}`, headingProps, children);
     };
   };
 
@@ -482,20 +309,5 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = () => {
   );
 };
 
-// Initialize the app
-function init(): void {
-  const rootElement = document.getElementById("root");
-  if (rootElement && window.ReactDOM) {
-    window.ReactDOM.render(<MarkdownViewer />, rootElement);
-  }
-}
-
-// Run the app
-if (typeof window !== "undefined") {
-  import("react-dom").then((ReactDOM) => {
-    window.ReactDOM = ReactDOM;
-    init();
-  });
-}
-
-export default MarkdownViewer; 
+export default MarkdownViewer;
+ 

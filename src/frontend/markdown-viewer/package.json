@@ -1,14 +1,14 @@
 {
   "name": "markdown-viewer-react",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "React-based Markdown Viewer for StreamFile Server Go",
   "license": "MIT",
   "author": "Simple Server Go",
   "type": "module",
-  "main": "src/MarkdownViewer.tsx",
   "scripts": {
-    "build": "npm run compile",
-    "compile": "webpack --mode=production"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "katex": "^0.16.25",
@@ -23,11 +23,8 @@
   "devDependencies": {
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-react": "^4.3.4",
     "typescript": "^5.9.3",
-    "ts-loader": "^9.5.4",
-    "css-loader": "^7.1.2",
-    "style-loader": "^4.0.0",
-    "webpack": "^5.102.1",
-    "webpack-cli": "^6.0.1"
+    "vite": "^7.1.11"
   }
 }

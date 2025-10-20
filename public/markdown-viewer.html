@@ -8,11 +8,7 @@
     <!-- tailwindcss play cdn -->
     <!-- <script src="https://cdn.tailwindcss.com"></script> -->
     <link href="/public/styles.css" rel="stylesheet">
-    <!-- React CDN -->
-    <!-- <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script> -->
-    <!-- <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script> -->
-    <script src="/public/libs/react.production.min.js"></script>
-    <script src="/public/libs/react-dom.production.min.js"></script>
+    <link href="/public/markdown-viewer/markdown-viewer.css" rel="stylesheet">
 </head>
 <body>
     <div id="root"></div>
@@ -40,8 +36,9 @@
             .then(data => {
                 window.markdownContent = data.content;
                 document.title = data.filename;
-                // Load the markdown viewer bundle
+                // Load the markdown viewer bundle (ES module)
                 const script = document.createElement('script');
+                script.type = 'module';
                 script.src = '/public/markdown-viewer/markdown-viewer.js';
                 document.body.appendChild(script);
             })
