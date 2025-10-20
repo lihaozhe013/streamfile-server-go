@@ -16,9 +16,20 @@
 
   const relPath = extractMediaPath();
   const fileTitleEl = document.getElementById("fileTitle");
-  fileTitleEl.textContent = relPath || "Media";
+  const appContainer = document.getElementById("app-container");
+  const headerEl = document.getElementById("playerHeader");
+  const supportsHover =
+    typeof window.matchMedia === "function"
+      ? window.matchMedia("(hover: hover)").matches
+      : true;
+
+  if (fileTitleEl) fileTitleEl.textContent = relPath || "Media";
   // Keep document title in sync with displayed filename
   document.title = relPath || "Media";
+
+  if (appContainer && !appContainer.dataset.chrome) {
+    appContainer.dataset.chrome = "visible";
+  }
 
   const mediaUrl =
     "/files/" + relPath + (relPath.includes("?") ? "&" : "?") + "raw=1";
@@ -39,13 +50,13 @@
     videoEl.style.transform = "translate(-50%, -50%)";
   } else {
     videoEl.setAttribute("playsinline", "");
-  // For video, fill the entire container
-  videoEl.style.width = "100%";
-  videoEl.style.height = "100%";
-  videoEl.style.objectFit = "contain";
-  videoEl.style.position = "absolute";
-  videoEl.style.top = "0";
-  videoEl.style.left = "0";
+    // For video, fill the entire container
+    videoEl.style.width = "100%";
+    videoEl.style.height = "100%";
+    videoEl.style.objectFit = "contain";
+    videoEl.style.position = "absolute";
+    videoEl.style.top = "0";
+    videoEl.style.left = "0";
   }
 
   // Provide source – rely on server Content-Type
@@ -66,6 +77,43 @@
     },
   });
 
+  const setChromeVisible = () => {
+    if (supportsHover && appContainer) {
+      appContainer.dataset.chrome = "visible";
+    }
+  };
+
+  const setChromeHidden = () => {
+    if (supportsHover && appContainer) {
+      appContainer.dataset.chrome = "hidden";
+    }
+  };
+
+  const nudgePlayerActive = () => {
+    player.userActive(true);
+  };
+
+  if (supportsHover && appContainer) {
+    player.on("useractive", setChromeVisible);
+    player.on("userinactive", setChromeHidden);
+    player.on("play", setChromeVisible);
+    player.on("pause", setChromeVisible);
+    player.on("fullscreenchange", setChromeVisible);
+
+    if (headerEl) {
+      ["mousemove", "mouseenter", "touchstart"].forEach((evt) => {
+        headerEl.addEventListener(
+          evt,
+          () => {
+            setChromeVisible();
+            nudgePlayerActive();
+          },
+          { passive: true }
+        );
+      });
+    }
+  }
+
   // Keyboard shortcuts: Left / Right = 5s seek, Space = toggle, F = fullscreen
   document.addEventListener("keydown", (e) => {
     // Ignore if focused inside input/textarea/contentEditable
@@ -81,11 +129,15 @@
     switch (e.key) {
       case "ArrowLeft":
         e.preventDefault();
+        setChromeVisible();
+        nudgePlayerActive();
         player.currentTime(Math.max(0, player.currentTime() - seekStep));
         flashSeek("-" + seekStep + "s");
         break;
       case "ArrowRight":
         e.preventDefault();
+        setChromeVisible();
+        nudgePlayerActive();
         player.currentTime(
           Math.min(
             player.duration() || Infinity,
@@ -96,12 +148,16 @@
         break;
       case " ": // Space
         e.preventDefault();
+        setChromeVisible();
+        nudgePlayerActive();
         if (player.paused()) player.play();
         else player.pause();
         break;
       case "f":
       case "F":
         e.preventDefault();
+        setChromeVisible();
+        nudgePlayerActive();
         if (player.isFullscreen()) player.exitFullscreen();
         else player.requestFullscreen();
         break;
@@ -153,19 +209,20 @@
   }
 
   // Open in Native Player button handler
-  window.addEventListener('load', function() {
+  window.addEventListener("load", function () {
     const openNativeBtn = document.getElementById("openNativeBtn");
-    
+
     if (openNativeBtn) {
-      openNativeBtn.addEventListener("click", function(e) {
+      openNativeBtn.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
-        
+
         // Show a quick visual feedback
         const originalText = openNativeBtn.innerHTML;
-        openNativeBtn.innerHTML = '<span class="flex items-center gap-2">Opening...</span>';
-        
-        setTimeout(function() {
+        openNativeBtn.innerHTML =
+          '<span class="flex items-center gap-2">Opening...</span>';
+
+        setTimeout(function () {
           // Navigate to the raw media file URL, letting the browser handle it natively
           window.location.href = mediaUrl;
         }, 200);
@@ -176,13 +233,13 @@
   // Dynamic resize handling
   function handleResize() {
     // With fill mode, let CSS drive size; just nudge video.js
-    if (player) player.trigger('resize');
+    if (player) player.trigger("resize");
   }
 
   // Listen for window resize events
-  window.addEventListener('resize', handleResize);
-  window.addEventListener('orientationchange', handleResize);
-  
+  window.addEventListener("resize", handleResize);
+  window.addEventListener("orientationchange", handleResize);
+
   // Initial resize
   handleResize();
 })();
