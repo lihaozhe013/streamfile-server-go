@@ -3,7 +3,7 @@ module.exports = {
   content: [
     "./public/**/*.{html,js}",
     "./files/**/*.html",
-    "./react/src/**/*.{js,ts,jsx,tsx}"
+    "!./src/frontend/markdown-viewer/**"
   ],
   theme: {
     extend: {},

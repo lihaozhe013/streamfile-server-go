@@ -9,8 +9,8 @@
     "build:markdown-viewer": "cd src/frontend/markdown-viewer && npm run build",
     "build:prod": "npm run build && node scripts/post-build-prod.js",
     "clean": "node scripts/clean.js",
-    "build-css": "tailwindcss -i ./src/frontend/input.css -o ./public/styles.css --watch",
-    "build-css-prod": "tailwindcss -i ./src/frontend/input.css -o ./public/styles.css --minify"
+    "build-css": "postcss ./src/frontend/input.css -o ./public/styles.css --watch",
+    "build-css-prod": "postcss ./src/frontend/input.css -o ./public/styles.css"
   },
   "keywords": [
     "go",
@@ -20,8 +20,12 @@
   "author": "lihaozhe013",
   "license": "MIT",
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.15",
     "@types/node": "^24.9.1",
+    "autoprefixer": "^10.4.21",
     "fs-extra": "11.3.2",
-    "tailwindcss": "^3.4.0"
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.0",
+    "tailwindcss": "^4.1.15"
   }
 }
