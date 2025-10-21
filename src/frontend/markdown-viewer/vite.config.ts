@@ -8,6 +8,7 @@ const __dirname = path.dirname(__filename);
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/public/markdown-viewer/',
   plugins: [react()],
   css: {
     postcss: './postcss.config.js',
@@ -17,6 +18,9 @@ export default defineConfig({
     emptyOutDir: true,
     cssCodeSplit: false,
     rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html')
+      },
       output: {
         // Single bundle output
         entryFileNames: 'markdown-viewer.js',

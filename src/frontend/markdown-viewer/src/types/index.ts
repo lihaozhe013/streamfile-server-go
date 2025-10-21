@@ -13,6 +13,7 @@ export interface MarkdownViewerProps {}
 declare global {
   interface Window {
     markdownContent?: string;
+    markdownContentReady?: boolean;
   }
 }
 

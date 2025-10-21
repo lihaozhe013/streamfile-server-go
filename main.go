@@ -240,7 +240,7 @@ func setupFileRoutes(router *gin.Engine, cfg *config.Config) {
 
 		// Markdown viewer
 		if ext == ".md" {
-			c.File("./public/markdown-viewer.html")
+			c.File("./public/markdown-viewer/index.html")
 			return
 		}
 
