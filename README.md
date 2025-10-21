@@ -1,13 +1,24 @@
-### StreamFile Server Go
+# StreamFile Server Go
 
 A lightweight streamfile server written in Go that provides file upload, download, browse, Markdown preview, and an enhanced media (video/audio) player.
 
 -----
 
-### Quick Start
+# Quick Start
 
-#### Compile and Run
+## Compile and Run
+### Build
+```
+# this will build both backend and frontend
+npm run build
+```
 
+### Run
+```
+./simple-server
+```
+
+### Backend Only
 ```bash
 # run
 go run .
@@ -19,7 +30,7 @@ go build
 ./simple-server
 ```
 
-#### Configuration
+## Configuration
 
 Create a `config.yaml` file (refer to `config.yaml.example`) or use environment variables:
 
@@ -32,7 +43,7 @@ export PORT=8000
 
 -----
 
-### Directory Structure
+# Directory Structure
 
 ```
 files/
@@ -43,7 +54,7 @@ files/
 
 -----
 
-### Development
+# Development
 
 ```bash
 # run in development mode
@@ -57,7 +68,7 @@ GOOS=darwin GOARCH=amd64 go build -o simple-server-macos
 
 -----
 
-### Media Player
+# Media Player
 
 The server includes an integrated Video/Audio player (powered by Video.js via CDN) for common media files:
 
