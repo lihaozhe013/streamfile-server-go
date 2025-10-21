@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import MarkdownViewer from "@/MarkdownViewer";
-import "@/markdown-styles.css";
+import "@/index.css"; // Tailwind CSS
+import "@/markdown-styles.css"; // Markdown-specific styles
 import { testMarkdownContent, shortMarkdownContent } from "@/test/testContent";
 
 // Development mode: inject test content

@@ -1,9 +1,4 @@
-/* Tailwind directives - only in dev mode */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Markdown content styles only - web page layout now uses Tailwind CSS */
+/* Markdown content styles only - web page layout uses Tailwind CSS */
 
 .preview {
   font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB",

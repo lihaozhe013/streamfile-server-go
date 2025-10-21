@@ -9,6 +9,9 @@ const __dirname = path.dirname(__filename);
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  css: {
+    postcss: './postcss.config.js',
+  },
   build: {
     outDir: 'dist',
     emptyOutDir: true,
@@ -37,7 +40,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
       '@/types': path.resolve(__dirname, './src/types'),
       '@/utils': path.resolve(__dirname, './src/utils'),
-      '@/styles': path.resolve(__dirname, './src/styles')
+      '@/components': path.resolve(__dirname, './src/components'),
+      '@/test': path.resolve(__dirname, './src/test')
     }
   }
 });

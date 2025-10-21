@@ -176,15 +176,59 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-gray-100 flex flex-col font-sans">
       {/* Header */}
-      <header className="sticky lg:hidden top-0 z-30 bg-white/90 backdrop-blur border-b border-gray-200 shadow-sm">
-        <div className="max-w-none px-6 py-3 flex justify-end items-center">
+      <header
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 30,
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          backdropFilter: 'blur(8px)',
+          borderBottom: '1px solid #e5e7eb',
+          boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        }}
+        className="lg:hidden"
+      >
+        <div
+          style={{
+            maxWidth: 'none',
+            padding: '0.75rem 1.5rem',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+          }}
+        >
           {/* Mobile TOC Toggle */}
           <button
             onClick={() => setIsTocOpen(!isTocOpen)}
-            className="lg:hidden inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 hover:text-gray-900 transition-all duration-200 shadow-sm hover:shadow-md"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '0.5rem 1rem',
+              fontSize: '0.875rem',
+              fontWeight: 500,
+              color: '#374151',
+              backgroundColor: '#ffffff',
+              border: '1px solid #d1d5db',
+              borderRadius: '0.5rem',
+              boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+              transition: 'all 0.2s',
+              cursor: 'pointer',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#f9fafb';
+              e.currentTarget.style.color = '#111827';
+              e.currentTarget.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#ffffff';
+              e.currentTarget.style.color = '#374151';
+              e.currentTarget.style.boxShadow = '0 1px 2px 0 rgba(0, 0, 0, 0.05)';
+            }}
+            className="lg:hidden"
           >
             <svg
-              className="w-4 h-4"
+              style={{ width: '1rem', height: '1rem' }}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
