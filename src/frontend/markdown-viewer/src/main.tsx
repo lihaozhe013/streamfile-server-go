@@ -1,24 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import MarkdownViewer from '@/MarkdownViewer';
-import '@/markdown-styles.css';
-import { testMarkdownContent, shortMarkdownContent } from '@/test/testContent';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import MarkdownViewer from "@/MarkdownViewer";
+import "@/markdown-styles.css";
+import { testMarkdownContent, shortMarkdownContent } from "@/test/testContent";
 
 // Development mode: inject test content
 if (import.meta.env.DEV) {
-  console.log('🚀 Running in development mode');
-  
+  console.log("🚀 Running in development mode");
+
   // Inject test markdown content
   window.markdownContent = testMarkdownContent;
-  
+
   // Add dev tools to window for testing
   (window as any).devTools = {
     setContent: (content: string) => {
       window.markdownContent = content;
       // Force re-render
-      const rootElement = document.getElementById('root');
+      const rootElement = document.getElementById("root");
       if (rootElement) {
-        rootElement.innerHTML = '';
+        rootElement.innerHTML = "";
         ReactDOM.createRoot(rootElement).render(
           <React.StrictMode>
             <MarkdownViewer />
@@ -34,17 +34,17 @@ if (import.meta.env.DEV) {
     },
     loadCustomContent: (content: string) => {
       (window as any).devTools.setContent(content);
-    }
+    },
   };
-  
-  console.log('📝 Test content loaded!');
-  console.log('🛠️  Available dev tools:');
-  console.log('  - devTools.loadTestContent() - Load full test document');
-  console.log('  - devTools.loadShortContent() - Load short test');
-  console.log('  - devTools.loadCustomContent(content) - Load custom markdown');
+
+  console.log("📝 Test content loaded!");
+  console.log("🛠️  Available dev tools:");
+  console.log("  - devTools.loadTestContent() - Load full test document");
+  console.log("  - devTools.loadShortContent() - Load short test");
+  console.log("  - devTools.loadCustomContent(content) - Load custom markdown");
 }
 
-const rootElement = document.getElementById('root');
+const rootElement = document.getElementById("root");
 
 if (rootElement) {
   ReactDOM.createRoot(rootElement).render(
