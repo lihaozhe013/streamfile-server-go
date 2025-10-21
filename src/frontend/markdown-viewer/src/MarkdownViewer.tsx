@@ -14,6 +14,7 @@ import {
   processRelativePaths,
   extractHeadings,
 } from "@/utils/markdown";
+import DevToolsPanel from "@/components/DevToolsPanel";
 
 const MarkdownViewer: React.FC<MarkdownViewerProps> = () => {
   // Get markdown content from window object (passed from server)
@@ -305,6 +306,14 @@ const MarkdownViewer: React.FC<MarkdownViewerProps> = () => {
           </article>
         </div>
       </main>
+      
+      {/* Dev Tools Panel - only in development */}
+      {import.meta.env.DEV && (
+        <DevToolsPanel
+          onLoadTest={() => (window as any).devTools?.loadTestContent()}
+          onLoadShort={() => (window as any).devTools?.loadShortContent()}
+        />
+      )}
     </div>
   );
 };
